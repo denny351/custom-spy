@@ -1,16 +1,15 @@
-import playersIcon from "./assets/players-icon.png";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import NewGamePage from "./pages/NewGamePage";
+import GameViewPage from "./pages/GameViewPage";
 
 function App() {
   return (
-    <div className="container border-2">
-      <h1 id="title" className="text-3xl font-bold">
-        Custom Spy
-      </h1>
-      <div>
-        <img src={playersIcon} alt="Player icon" />
-        <p>Players</p>
-      </div>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<NewGamePage />} />
+        <Route path="/game" element={<GameViewPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
