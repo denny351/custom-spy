@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-html * {
+body {
   /* font-family: "Roboto", sans-serif; */
   font-family: "Sixtyfour", sans-serif;
   word-spacing: -8px;
