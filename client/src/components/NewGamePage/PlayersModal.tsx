@@ -11,22 +11,22 @@ interface Props {
 }
 
 function PlayersModal(props: Props) {
-  const [playerNames, setplayerNames] = useState<string[]>(["", "", ""]);
+  const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""]);
 
   const addPlayer = () => {
-    setplayerNames([...playerNames, ""]);
+    setPlayerNames([...playerNames, ""]);
   };
 
   const removePlayer = (indexToRemove: number) => {
     if (playerNames.length > 3) {
-      setplayerNames(playerNames.filter((_, index) => index !== indexToRemove));
+      setPlayerNames(playerNames.filter((_, index) => index !== indexToRemove));
     }
   };
 
   const handleInputChange = (index: number, value: string) => {
     const newplayerNames = [...playerNames];
     newplayerNames[index] = value;
-    setplayerNames(newplayerNames);
+    setPlayerNames(newplayerNames);
   };
 
   const savePlayers = () => {
@@ -38,7 +38,14 @@ function PlayersModal(props: Props) {
   };
 
   return (
-    <Modal isOpen={props.isOpen} onRequestClose={props.onClose} contentLabel="Players Modal">
+    <Modal
+      isOpen={props.isOpen}
+      onRequestClose={() => {
+        setPlayerNames(["", "", ""]);
+        props.onClose();
+      }}
+      contentLabel="Players Modal"
+    >
       <div className="flex flex-col items-center">
         <h2>Players</h2>
 
@@ -56,12 +63,12 @@ function PlayersModal(props: Props) {
               onChange={(e) => handleInputChange(index, e.target.value)}
             />
             <span className="absolute right-2.5 top-5 z-10" onClick={() => removePlayer(index)}>
-              <Trash2 color="gray" size={18} />
+              <Trash2 color="spy-gray" size={18} />
             </span>
           </div>
         ))}
 
-        <ActionButton className="w-2/3 my-5" onClick={savePlayers}>
+        <ActionButton onClick={savePlayers}>
           Save
         </ActionButton>
       </div>

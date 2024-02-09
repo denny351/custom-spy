@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes } from "react";
 function ActionButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
   const { className, children, ...rest } = props;
 
-  const defaultClasses = "py-2 border-2";
+  const defaultClasses = "py-2 border-2 w-2/3 my-5 max-w-44";
 
   const combinedClassName = className ? `${defaultClasses} ${className}` : defaultClasses;
 

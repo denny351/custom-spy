@@ -6,21 +6,21 @@ import GameOptionRow from "../components/NewGamePage/GameOptionRow";
 import playersIcon from "../assets/players-icon.png";
 import spyIcon from "../assets/spy-icon.png";
 import timerIcon from "../assets/timer-icon.png";
-import setsIcon from "../assets/sets-icon.png";
+import SpiesModal from "../components/NewGamePage/SpiesModal";
+import TimerModal from "../components/NewGamePage/TimerModal";
+import Layout from "../components/common/Layout";
 
 interface ModalState {
   playersModal: boolean;
-  modal2: boolean;
-  modal3: boolean;
-  modal4: boolean;
+  spiesModal: boolean;
+  timerModal: boolean;
 }
 
 function NewGamePage() {
   const [modalState, setModalState] = useState<ModalState>({
     playersModal: false,
-    modal2: false,
-    modal3: false,
-    modal4: false
+    spiesModal: false,
+    timerModal: false
   });
 
   const toggleModal = (modalName: keyof ModalState) => {
@@ -31,7 +31,7 @@ function NewGamePage() {
   };
 
   return (
-    <div className="container mx-auto	max-w-2xl p-4 border-2">
+    <Layout>
       <h1 id="title" className="text-3xl text-center my-8">
         Custom Spy
       </h1>
@@ -46,24 +46,21 @@ function NewGamePage() {
         icon={spyIcon}
         label="Spies"
         infoText="3"
-        onClick={() => toggleModal("playersModal")}
+        onClick={() => toggleModal("spiesModal")}
       />
       <GameOptionRow
         icon={timerIcon}
         label="Timer"
         infoText="10 min"
-        onClick={() => toggleModal("playersModal")}
-      />
-      <GameOptionRow
-        icon={setsIcon}
-        label="Sets"
-        infoText="Geography"
-        onClick={() => toggleModal("playersModal")}
+        onClick={() => toggleModal("timerModal")}
       />
 
       <PlayersModal isOpen={modalState.playersModal} onClose={() => toggleModal("playersModal")} />
+      <SpiesModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
+      <TimerModal isOpen={modalState.timerModal} onClose={() => toggleModal("timerModal")} />
+
       <Link to="/game">Game</Link>
-    </div>
+    </Layout>
   );
 }
 
