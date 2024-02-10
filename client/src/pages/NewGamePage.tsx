@@ -12,6 +12,7 @@ import SpyCountModal from "../components/NewGamePage/SpyCountModal";
 import TimerModal from "../components/NewGamePage/TimerModal";
 import Layout from "../components/common/Layout";
 import { RootState } from "../store/store";
+import ActionButton from "../components/common/ActionButton";
 
 interface ModalState {
   playersModal: boolean;
@@ -60,19 +61,18 @@ function NewGamePage() {
         onClick={() => toggleModal("timerModal")}
       />
       <Link to="/sets">
-        <GameOptionRow
-          icon={setsIcon}
-          label="Sets"
-          infoText={gameData.set.name}
-          onClick={() => {}}
-        />
+        <GameOptionRow icon={setsIcon} label="Sets" infoText={gameData.set.name} onClick={() => {}} />
       </Link>
+
+      <div className="mt-auto mb-8">
+        <Link to="/game" className="block text-center mb-4">
+          <ActionButton>Start</ActionButton>
+        </Link>
+      </div>
 
       <PlayersModal isOpen={modalState.playersModal} onClose={() => toggleModal("playersModal")} />
       <SpyCountModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
       <TimerModal isOpen={modalState.timerModal} onClose={() => toggleModal("timerModal")} />
-
-      <Link to="/game">Game</Link>
     </Layout>
   );
 }
