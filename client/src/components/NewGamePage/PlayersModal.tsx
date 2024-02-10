@@ -63,7 +63,7 @@ function PlayersModal(props: Props) {
               onChange={(e) => handleInputChange(index, e.target.value)}
             />
             <span className="absolute right-2.5 top-5 z-10" onClick={() => removePlayer(index)}>
-              <Trash2 color="spy-gray" size={18} />
+              <Trash2 color="gray" size={18} />
             </span>
           </div>
         ))}

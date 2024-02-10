@@ -3,9 +3,12 @@
 @tailwind utilities;
 
 body {
-  /* font-family: "Roboto", sans-serif; */
   font-family: "Sixtyfour", sans-serif;
   word-spacing: -8px;
   color: white;
   background-color: black;
+}
+
+button {
+  word-spacing: -8px;
 }

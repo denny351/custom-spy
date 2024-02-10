@@ -6,6 +6,7 @@ import GameOptionRow from "../components/NewGamePage/GameOptionRow";
 import playersIcon from "../assets/players-icon.png";
 import spyIcon from "../assets/spy-icon.png";
 import timerIcon from "../assets/timer-icon.png";
+import setsIcon from "../assets/sets-icon.png";
 import SpiesModal from "../components/NewGamePage/SpiesModal";
 import TimerModal from "../components/NewGamePage/TimerModal";
 import Layout from "../components/common/Layout";
@@ -54,6 +55,14 @@ function NewGamePage() {
         infoText="10 min"
         onClick={() => toggleModal("timerModal")}
       />
+      <Link to="/sets">
+        <GameOptionRow
+          icon={setsIcon}
+          label="Sets"
+          infoText="Geography"
+          onClick={() => toggleModal("playersModal")}
+        />
+      </Link>
 
       <PlayersModal isOpen={modalState.playersModal} onClose={() => toggleModal("playersModal")} />
       <SpiesModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />

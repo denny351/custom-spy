@@ -5,5 +5,5 @@ interface Props {
 }
 
 export default function Layout(props: Props) {
-  return <div className="container mx-auto	max-w-2xl p-4 border-2">{props.children}</div>;
+  return <div className="container h-screen mx-auto max-w-2xl p-4 border-2">{props.children}</div>;
 }
