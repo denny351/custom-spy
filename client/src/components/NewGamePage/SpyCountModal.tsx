@@ -4,22 +4,22 @@ import SquareButton from "../common/SquareButton";
 import ActionButton from "../common/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { increaseTimer, decreaseTimer, setTimer } from "../../store/game/gameSlice";
+import { setSpyCount } from "../../store/game/gameSlice";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-function TimerModal(props: Props) {
-  const { timer } = useSelector((state: RootState) => state.game);
+function SpyCountModal(props: Props) {
+  const { spyCount } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialTimer, setInitialTimer] = useState<number>(10);
+  const [initialSpyCount, setInitialSpyCount] = useState<number>(1);
 
   useEffect(() => {
     if (props.isOpen) {
-      setInitialTimer(timer);
+      setInitialSpyCount(spyCount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOpen]);
@@ -28,18 +28,22 @@ function TimerModal(props: Props) {
     <Modal
       isOpen={props.isOpen}
       onRequestClose={() => {
-        dispatch(setTimer({ type: "set", value: initialTimer }));
+        dispatch(setSpyCount({ type: "set", value: initialSpyCount }));
         props.onClose();
       }}
       contentLabel="Players Modal"
     >
       <div className="flex flex-col items-center">
-        <h2>Timer</h2>
+        <h2>Spies</h2>
 
         <div className="flex items-center my-5">
-          <SquareButton onClick={() => dispatch(setTimer({ type: "decrement" }))}>-</SquareButton>
-          <p className="mx-4 text-lg">{timer} min.</p>
-          <SquareButton onClick={() => dispatch(setTimer({ type: "increment" }))}>+</SquareButton>
+          <SquareButton onClick={() => dispatch(setSpyCount({ type: "decrement" }))}>
+            -
+          </SquareButton>
+          <p className="mx-4 text-lg">{spyCount}</p>
+          <SquareButton onClick={() => dispatch(setSpyCount({ type: "increment" }))}>
+            +
+          </SquareButton>
         </div>
 
         <ActionButton onClick={props.onClose}>Save</ActionButton>
@@ -48,4 +52,4 @@ function TimerModal(props: Props) {
   );
 }
 
-export default TimerModal;
+export default SpyCountModal;

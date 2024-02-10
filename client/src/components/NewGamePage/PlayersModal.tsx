@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Trash2 } from "react-feather";
 import Modal from "../common/Modal";
 import SquareButton from "../common/SquareButton";
 import TextInput from "../common/TextInput";
 import ActionButton from "../common/ActionButton";
+import { RootState } from "../../store/store";
+import { setPlayers } from "../../store/game/gameSlice";
 
 interface Props {
   isOpen: boolean;
@@ -11,37 +14,39 @@ interface Props {
 }
 
 function PlayersModal(props: Props) {
-  const [playerNames, setPlayerNames] = useState<string[]>(["", "", ""]);
+  const { players } = useSelector((state: RootState) => state.game);
+  const dispatch = useDispatch();
+
+  const [initialPlayers, setInitialPlayers] = useState<string[]>(["", "", ""]);
+
+  useEffect(() => {
+    if (props.isOpen) {
+      setInitialPlayers(players);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.isOpen]);
 
   const addPlayer = () => {
-    setPlayerNames([...playerNames, ""]);
+    dispatch(setPlayers([...players, ""]));
   };
 
   const removePlayer = (indexToRemove: number) => {
-    if (playerNames.length > 3) {
-      setPlayerNames(playerNames.filter((_, index) => index !== indexToRemove));
+    if (players.length > 3) {
+      dispatch(setPlayers(players.filter((_, index) => index !== indexToRemove)));
     }
   };
 
   const handleInputChange = (index: number, value: string) => {
-    const newplayerNames = [...playerNames];
-    newplayerNames[index] = value;
-    setPlayerNames(newplayerNames);
-  };
-
-  const savePlayers = () => {
-    const isValid = playerNames.every((name) => name.trim() !== "");
-
-    if (isValid) {
-      console.log("good");
-    }
+    const newplayers = [...players];
+    newplayers[index] = value;
+    dispatch(setPlayers(newplayers));
   };
 
   return (
     <Modal
       isOpen={props.isOpen}
       onRequestClose={() => {
-        setPlayerNames(["", "", ""]);
+        dispatch(setPlayers(initialPlayers));
         props.onClose();
       }}
       contentLabel="Players Modal"
@@ -50,12 +55,12 @@ function PlayersModal(props: Props) {
         <h2>Players</h2>
 
         <div className="flex items-center my-5">
-          <SquareButton onClick={() => removePlayer(playerNames.length - 1)}>-</SquareButton>
-          <p className="mx-4 text-lg">{playerNames.length}</p>
+          <SquareButton onClick={() => removePlayer(players.length - 1)}>-</SquareButton>
+          <p className="mx-4 text-lg">{players.length}</p>
           <SquareButton onClick={addPlayer}>+</SquareButton>
         </div>
 
-        {playerNames.map((value, index) => (
+        {players.map((value, index) => (
           <div key={index} className="relative w-full">
             <TextInput
               placeholder={`Enter player name #${index + 1}`}
@@ -68,9 +73,7 @@ function PlayersModal(props: Props) {
           </div>
         ))}
 
-        <ActionButton onClick={savePlayers}>
-          Save
-        </ActionButton>
+        <ActionButton onClick={props.onClose}>Save</ActionButton>
       </div>
     </Modal>
   );

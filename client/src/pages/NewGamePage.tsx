@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import PlayersModal from "../components/NewGamePage/PlayersModal";
 import GameOptionRow from "../components/NewGamePage/GameOptionRow";
@@ -7,9 +8,10 @@ import playersIcon from "../assets/players-icon.png";
 import spyIcon from "../assets/spy-icon.png";
 import timerIcon from "../assets/timer-icon.png";
 import setsIcon from "../assets/sets-icon.png";
-import SpiesModal from "../components/NewGamePage/SpiesModal";
+import SpyCountModal from "../components/NewGamePage/SpyCountModal";
 import TimerModal from "../components/NewGamePage/TimerModal";
 import Layout from "../components/common/Layout";
+import { RootState } from "../store/store";
 
 interface ModalState {
   playersModal: boolean;
@@ -23,6 +25,8 @@ function NewGamePage() {
     spiesModal: false,
     timerModal: false
   });
+
+  const gameData = useSelector((state: RootState) => state.game);
 
   const toggleModal = (modalName: keyof ModalState) => {
     setModalState((prevState) => ({
@@ -40,32 +44,32 @@ function NewGamePage() {
       <GameOptionRow
         icon={playersIcon}
         label="Players"
-        infoText="3"
+        infoText={gameData.players.length.toString()}
         onClick={() => toggleModal("playersModal")}
       />
       <GameOptionRow
         icon={spyIcon}
         label="Spies"
-        infoText="3"
+        infoText={gameData.spyCount.toString()}
         onClick={() => toggleModal("spiesModal")}
       />
       <GameOptionRow
         icon={timerIcon}
         label="Timer"
-        infoText="10 min"
+        infoText={`${gameData.timer.toString()} min.`}
         onClick={() => toggleModal("timerModal")}
       />
       <Link to="/sets">
         <GameOptionRow
           icon={setsIcon}
           label="Sets"
-          infoText="Geography"
-          onClick={() => toggleModal("playersModal")}
+          infoText={gameData.set.name}
+          onClick={() => {}}
         />
       </Link>
 
       <PlayersModal isOpen={modalState.playersModal} onClose={() => toggleModal("playersModal")} />
-      <SpiesModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
+      <SpyCountModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
       <TimerModal isOpen={modalState.timerModal} onClose={() => toggleModal("timerModal")} />
 
       <Link to="/game">Game</Link>
