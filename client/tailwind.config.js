@@ -4,9 +4,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        "spy-gray": "#3f3f46"
-      }
-    }
+        "spy-gray": "#3f3f46",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };

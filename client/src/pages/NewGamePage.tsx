@@ -23,7 +23,7 @@ function NewGamePage() {
   const [modalState, setModalState] = useState<ModalState>({
     playersModal: false,
     spiesModal: false,
-    timerModal: false
+    timerModal: false,
   });
 
   const gameData = useSelector((state: RootState) => state.game);
@@ -31,7 +31,7 @@ function NewGamePage() {
   const toggleModal = (modalName: keyof ModalState) => {
     setModalState((prevState) => ({
       ...prevState,
-      [modalName]: !prevState[modalName]
+      [modalName]: !prevState[modalName],
     }));
   };
 

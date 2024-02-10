@@ -18,8 +18,8 @@ const initialState: GameState = {
   timer: 10,
   set: {
     id: 1,
-    name: "Geography"
-  }
+    name: "Geography",
+  },
 };
 
 type SpyCountAndTimerActionPayload =
@@ -72,8 +72,8 @@ export const gameSlice = createSlice({
     },
     setSet: (state, action) => {
       state.set = action.payload;
-    }
-  }
+    },
+  },
 });
 
 export const { setPlayers, setSpyCount, setTimer, setSet } = gameSlice.actions;

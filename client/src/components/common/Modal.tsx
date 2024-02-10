@@ -13,8 +13,8 @@ const customStyles = {
     width: "85vw",
     maxWidth: "500px",
     backgroundColor: "black",
-    borderRadius: "8px"
-  }
+    borderRadius: "8px",
+  },
 };
 
 function Modal(props: ReactModal.Props) {

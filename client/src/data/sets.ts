@@ -7,14 +7,14 @@ export default [
       {
         id: 1,
         name: "Beach",
-        description: "A sunny beach with crashing waves"
+        description: "A sunny beach with crashing waves",
       },
       {
         id: 2,
         name: "Marina",
-        description: "A busy marina with sailboats"
-      }
-    ]
+        description: "A busy marina with sailboats",
+      },
+    ],
   },
   {
     id: 2,
@@ -24,13 +24,13 @@ export default [
       {
         id: 3,
         name: "Downtown",
-        description: "Bustling streets and shops"
+        description: "Bustling streets and shops",
       },
       {
         id: 4,
         name: "Office Building",
-        description: "Corporate environment"
-      }
-    ]
-  }
+        description: "Corporate environment",
+      },
+    ],
+  },
 ];
