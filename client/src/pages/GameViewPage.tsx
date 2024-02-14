@@ -1,22 +1,24 @@
 import { useState, useMemo, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
 import SpyCard from "../components/GameViewPage/SpyCard";
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
+import { resetState } from "../store/game/gameSlice";
 
 function GameViewPage() {
   const { sets, selectedSetId, players, timer } = useSelector((state: RootState) => state.game);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [totalSeconds, setTotalSeconds] = useState<number>(timer * 1);
+  const [totalSeconds, setTotalSeconds] = useState<number>(timer * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
 
   const setLocations = sets[selectedSetId].locations;
   const location = useMemo(() => setLocations[Math.floor(Math.random() * setLocations.length)], [setLocations]);
   const spy = useMemo(() => players[Math.floor(Math.random() * players.length)], [players]);
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,7 +58,13 @@ function GameViewPage() {
 
   return (
     <Layout>
-      <Link to="/" className="flex items-center absolute top-6">
+      <Link
+        to="/"
+        className="flex items-center absolute top-6"
+        onClick={() => {
+          dispatch(resetState());
+        }}
+      >
         <ChevronLeft />
         Back
       </Link>

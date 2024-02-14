@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import PlayersModal from "../components/NewGamePage/PlayersModal";
 import GameOptionRow from "../components/NewGamePage/GameOptionRow";
@@ -13,6 +13,7 @@ import TimerModal from "../components/NewGamePage/TimerModal";
 import Layout from "../components/common/Layout";
 import { RootState } from "../store/store";
 import ActionButton from "../components/common/ActionButton";
+import { setBlankPlayers } from "../store/game/gameSlice";
 
 interface ModalState {
   playersModal: boolean;
@@ -28,12 +29,17 @@ function NewGamePage() {
   });
 
   const { players, spyCount, timer, sets, selectedSetId } = useSelector((state: RootState) => state.game);
+  const dispatch = useDispatch();
 
   const toggleModal = (modalName: keyof ModalState) => {
     setModalState((prevState) => ({
       ...prevState,
       [modalName]: !prevState[modalName],
     }));
+  };
+
+  const handleNewGame = () => {
+    dispatch(setBlankPlayers());
   };
 
   return (
@@ -65,7 +71,7 @@ function NewGamePage() {
       </Link>
 
       <div className="mt-auto mb-8">
-        <Link to="/game" className="block text-center mb-4">
+        <Link to="/game" className="block text-center mb-4" onClick={handleNewGame}>
           <ActionButton>Start</ActionButton>
         </Link>
       </div>

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import testSets from "../../testData/sets";
+import testSets from "../../data/sets";
 import { Set } from "../../interfaces/Set";
 
 interface GameState {
@@ -26,6 +26,9 @@ export const gameSlice = createSlice({
   reducers: {
     setPlayers: (state, action: PayloadAction<string[]>) => {
       state.players = action.payload;
+    },
+    setBlankPlayers: (state) => {
+      state.players = state.players.map((player, index) => (player.trim() === "" ? `Player ${index + 1}` : player));
     },
     setSpyCount: (state, action: PayloadAction<SpyCountAndTimerActionPayload>) => {
       switch (action.payload.type) {
@@ -69,9 +72,11 @@ export const gameSlice = createSlice({
     setSelectedSetId: (state, action) => {
       state.selectedSetId = action.payload;
     },
+    resetState: () => initialState,
   },
 });
 
-export const { setPlayers, setSpyCount, setTimer, setSets, setSelectedSetId } = gameSlice.actions;
+export const { setPlayers, setBlankPlayers, setSpyCount, setTimer, setSets, setSelectedSetId, resetState } =
+  gameSlice.actions;
 
 export default gameSlice.reducer;
