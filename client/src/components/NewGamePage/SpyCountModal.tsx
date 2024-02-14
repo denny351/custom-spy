@@ -31,7 +31,7 @@ function SpyCountModal(props: Props) {
         dispatch(setSpyCount({ type: "set", value: prevSpyCount }));
         props.onClose();
       }}
-      contentLabel="Players Modal"
+      contentLabel="Spies Modal"
     >
       <div className="flex flex-col items-center">
         <h2>Spies</h2>

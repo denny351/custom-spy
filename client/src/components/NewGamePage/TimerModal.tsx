@@ -31,7 +31,7 @@ function TimerModal(props: Props) {
         dispatch(setTimer({ type: "set", value: prevTimer }));
         props.onClose();
       }}
-      contentLabel="Players Modal"
+      contentLabel="Timer Modal"
     >
       <div className="flex flex-col items-center">
         <h2>Timer</h2>
