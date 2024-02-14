@@ -14,6 +14,7 @@ import Layout from "../components/common/Layout";
 import { RootState } from "../store/store";
 import ActionButton from "../components/common/ActionButton";
 import { setBlankPlayers } from "../store/game/gameSlice";
+import useSelectedSet from "../utils/useSelectedSet";
 
 interface ModalState {
   playersModal: boolean;
@@ -28,7 +29,8 @@ function NewGamePage() {
     timerModal: false,
   });
 
-  const { players, spyCount, timer, sets, selectedSetId } = useSelector((state: RootState) => state.game);
+  const { players, spyCount, timer } = useSelector((state: RootState) => state.game);
+  const { selectedSetName } = useSelectedSet();
   const dispatch = useDispatch();
 
   const toggleModal = (modalName: keyof ModalState) => {
@@ -67,7 +69,7 @@ function NewGamePage() {
         onClick={() => toggleModal("timerModal")}
       />
       <Link to="/sets">
-        <GameOptionRow icon={setsIcon} label="Sets" infoText={sets[selectedSetId].name} onClick={() => {}} />
+        <GameOptionRow icon={setsIcon} label="Sets" infoText={selectedSetName} onClick={() => {}} />
       </Link>
 
       <div className="mt-auto mb-8">

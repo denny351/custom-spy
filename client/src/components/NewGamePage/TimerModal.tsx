@@ -4,7 +4,7 @@ import SquareButton from "../common/SquareButton";
 import ActionButton from "../common/ActionButton";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { increaseTimer, decreaseTimer, setTimer } from "../../store/game/gameSlice";
+import { setTimer } from "../../store/game/gameSlice";
 
 interface Props {
   isOpen: boolean;

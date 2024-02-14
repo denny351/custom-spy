@@ -7,19 +7,30 @@ import SpyCard from "../components/GameViewPage/SpyCard";
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
 import { resetState } from "../store/game/gameSlice";
+import useSelectedSet from "../utils/useSelectedSet";
 
 function GameViewPage() {
-  const { sets, selectedSetId, players, timer } = useSelector((state: RootState) => state.game);
+  const { players, timer } = useSelector((state: RootState) => state.game);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [totalSeconds, setTotalSeconds] = useState<number>(timer * 60);
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
+  const { selectedSetLocations } = useSelectedSet();
 
-  const setLocations = sets[selectedSetId].locations;
-  const location = useMemo(() => setLocations[Math.floor(Math.random() * setLocations.length)], [setLocations]);
+  const location = useMemo(
+    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)],
+    [selectedSetLocations]
+  );
   const spy = useMemo(() => players[Math.floor(Math.random() * players.length)], [players]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const emptyPlayers = players.every((player) => player === "");
+    if (emptyPlayers) {
+      navigate("/");
+    }
+  }, [navigate, players]);
 
   useEffect(() => {
     let timer: number;
@@ -78,7 +89,7 @@ function GameViewPage() {
           renderTimer()
         ) : (
           <SpyCard
-            location={location.name}
+            location={location}
             player={players[currentIndex]}
             isSpy={players[currentIndex] === spy}
             onClick={handleCardClick}

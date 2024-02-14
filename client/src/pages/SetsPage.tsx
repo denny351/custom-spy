@@ -1,13 +1,25 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
+import { useDispatch, useSelector } from "react-redux";
+
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
 import SetRow from "../components/SetsPage/SetRow";
-import sets from "../data/sets";
+import { setSelectedSet } from "../store/game/gameSlice";
+import { RootState } from "../store/store";
+import { SelectedSet } from "../interfaces/Set";
 
 function SetsPage() {
   const [setsType, setSetsType] = useState<"premade" | "custom">("premade");
+  const { premadeSets, customSets } = useSelector((state: RootState) => state.game);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleRowClick = (selectedSet: SelectedSet) => {
+    dispatch(setSelectedSet(selectedSet));
+    navigate("/");
+  };
 
   return (
     <Layout>
@@ -36,12 +48,22 @@ function SetsPage() {
         </div>
 
         {setsType === "premade" &&
-          sets.map((set) => (
-            <SetRow key={set.id} name={set.name} cardsQuantity={set.locations.length} />
+          premadeSets.map((set) => (
+            <SetRow
+              key={set.id}
+              name={set.name}
+              cardsQuantity={set.locations.length}
+              onClick={() => handleRowClick({ type: "premade", id: set.id })}
+            />
           ))}
         {setsType === "custom" &&
-          sets.map((set) => (
-            <SetRow key={set.id} name={set.name} cardsQuantity={set.locations.length} />
+          customSets.map((set) => (
+            <SetRow
+              key={set.id}
+              name={set.name}
+              cardsQuantity={set.locations.length}
+              onClick={() => handleRowClick({ type: "custom", id: set.id })}
+            />
           ))}
       </div>
     </Layout>

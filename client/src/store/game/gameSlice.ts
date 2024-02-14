@@ -1,21 +1,23 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import testSets from "../../data/sets";
-import { Set } from "../../interfaces/Set";
+import premadeSets from "../../data/premadeSets";
+import { SelectedSet, Set } from "../../interfaces/Set";
 
 interface GameState {
   players: string[];
   spyCount: number;
   timer: number;
-  sets: Set[];
-  selectedSetId: number;
+  premadeSets: Set[];
+  customSets: Set[];
+  selectedSet: SelectedSet;
 }
 
 const initialState: GameState = {
   players: ["", "", ""],
   spyCount: 1,
   timer: 10,
-  sets: testSets,
-  selectedSetId: 1,
+  premadeSets: premadeSets,
+  customSets: [],
+  selectedSet: { type: "premade", id: 1 },
 };
 
 type SpyCountAndTimerActionPayload = { type: "set"; value: number } | { type: "increment" } | { type: "decrement" };
@@ -66,17 +68,17 @@ export const gameSlice = createSlice({
           break;
       }
     },
-    setSets: (state, action) => {
-      state.sets = action.payload;
+    setCustomSets: (state, action) => {
+      state.customSets = action.payload;
     },
-    setSelectedSetId: (state, action) => {
-      state.selectedSetId = action.payload;
+    setSelectedSet: (state, action: PayloadAction<SelectedSet>) => {
+      state.selectedSet = { type: action.payload.type, id: action.payload.id };
     },
     resetState: () => initialState,
   },
 });
 
-export const { setPlayers, setBlankPlayers, setSpyCount, setTimer, setSets, setSelectedSetId, resetState } =
+export const { setPlayers, setBlankPlayers, setSpyCount, setTimer, setCustomSets, setSelectedSet, resetState } =
   gameSlice.actions;
 
 export default gameSlice.reducer;
