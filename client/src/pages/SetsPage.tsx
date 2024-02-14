@@ -9,16 +9,26 @@ import SetRow from "../components/SetsPage/SetRow";
 import { setSelectedSet } from "../store/game/gameSlice";
 import { RootState } from "../store/store";
 import { SelectedSet } from "../interfaces/Set";
+import ViewSetModal from "../components/SetsPage/ViewSetModal";
+import { Set } from "../interfaces/Set";
 
 function SetsPage() {
-  const [setsType, setSetsType] = useState<"premade" | "custom">("premade");
   const { premadeSets, customSets } = useSelector((state: RootState) => state.game);
+  const [setsType, setSetsType] = useState<"premade" | "custom">("premade");
+  const [isViewSetModalOpen, setIsViewSetModalOpen] = useState(false);
+  const [selectedSetForModal, setSelectedSetForModal] = useState<Set | null>(premadeSets[0]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleRowClick = (selectedSet: SelectedSet) => {
     dispatch(setSelectedSet(selectedSet));
     navigate("/");
+  };
+
+  const handleViewClick = (id: number) => {
+    const selected = premadeSets.find((set) => set.id === id)!;
+    setSelectedSetForModal(selected);
+    setIsViewSetModalOpen(true);
   };
 
   return (
@@ -53,7 +63,8 @@ function SetsPage() {
               key={set.id}
               name={set.name}
               cardsQuantity={set.locations.length}
-              onClick={() => handleRowClick({ type: "premade", id: set.id })}
+              onRowClick={() => handleRowClick({ type: "premade", id: set.id })}
+              onViewClick={() => handleViewClick(set.id)}
             />
           ))}
         {setsType === "custom" &&
@@ -62,9 +73,16 @@ function SetsPage() {
               key={set.id}
               name={set.name}
               cardsQuantity={set.locations.length}
-              onClick={() => handleRowClick({ type: "custom", id: set.id })}
+              onRowClick={() => handleRowClick({ type: "custom", id: set.id })}
+              onViewClick={() => handleViewClick(set.id)}
             />
           ))}
+
+        <ViewSetModal
+          isOpen={isViewSetModalOpen}
+          onClose={() => setIsViewSetModalOpen(false)}
+          set={selectedSetForModal}
+        />
       </div>
     </Layout>
   );
