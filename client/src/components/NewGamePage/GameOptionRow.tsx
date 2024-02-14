@@ -10,7 +10,7 @@ interface Props {
 function GameOptionRow(props: Props) {
   return (
     <div
-      className="flex items-center justify-between my-3.5 py-4 px-2.5 text-sm tracking-tight rounded border-2 cursor-pointer active:bg-spy-gray"
+      className="flex items-center justify-between my-3.5 py-4 px-2.5 text-sm tracking-tight rounded border-2 clickable"
       onClick={props.onClick}
     >
       <div className="flex items-center">

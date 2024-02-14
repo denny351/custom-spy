@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .clickable {
+    @apply cursor-pointer active:bg-spy-gray;
+  }
+}
+
 body {
   font-family: "Sixtyfour", sans-serif;
   /* font Sixtyfour has large spacing and will be using this font for everything except p tags */
