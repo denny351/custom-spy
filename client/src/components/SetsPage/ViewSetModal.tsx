@@ -13,7 +13,7 @@ function ViewSetModal(props: Props) {
     <Modal isOpen={props.isOpen} onRequestClose={props.onClose} contentLabel="View Set Modal">
       <div className="flex flex-col items-center">
         {props.set?.locations.map((item) => (
-          <p className="my-1">{item}</p>
+          <p className="my-1 text-center">{item}</p>
         ))}
         <ActionButton className="mb-3" onClick={props.onClose}>
           Close
