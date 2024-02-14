@@ -4,7 +4,7 @@ import { ChevronLeft } from "react-feather";
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
 import SetRow from "../components/SetsPage/SetRow";
-import sets from "../data/sets";
+import sets from "../testData/sets";
 
 function SetsPage() {
   const [setsType, setSetsType] = useState<"premade" | "custom">("premade");

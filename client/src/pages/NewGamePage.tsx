@@ -27,7 +27,7 @@ function NewGamePage() {
     timerModal: false,
   });
 
-  const gameData = useSelector((state: RootState) => state.game);
+  const { players, spyCount, timer, sets, selectedSetId } = useSelector((state: RootState) => state.game);
 
   const toggleModal = (modalName: keyof ModalState) => {
     setModalState((prevState) => ({
@@ -45,23 +45,23 @@ function NewGamePage() {
       <GameOptionRow
         icon={playersIcon}
         label="Players"
-        infoText={gameData.players.length.toString()}
+        infoText={players.length.toString()}
         onClick={() => toggleModal("playersModal")}
       />
       <GameOptionRow
         icon={spyIcon}
         label="Spies"
-        infoText={gameData.spyCount.toString()}
+        infoText={spyCount.toString()}
         onClick={() => toggleModal("spiesModal")}
       />
       <GameOptionRow
         icon={timerIcon}
         label="Timer"
-        infoText={`${gameData.timer.toString()} min.`}
+        infoText={`${timer.toString()} min.`}
         onClick={() => toggleModal("timerModal")}
       />
       <Link to="/sets">
-        <GameOptionRow icon={setsIcon} label="Sets" infoText={gameData.set.name} onClick={() => {}} />
+        <GameOptionRow icon={setsIcon} label="Sets" infoText={sets[selectedSetId].name} onClick={() => {}} />
       </Link>
 
       <div className="mt-auto mb-8">

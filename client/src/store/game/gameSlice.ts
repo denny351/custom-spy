@@ -1,31 +1,24 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import testSets from "../../testData/sets";
+import { Set } from "../../interfaces/Set";
 
-// Define a type for the slice state
 interface GameState {
   players: string[];
   spyCount: number;
   timer: number;
-  set: {
-    id: number;
-    name: string;
-  };
+  sets: Set[];
+  selectedSetId: number;
 }
 
-// Define the initial state using that type
 const initialState: GameState = {
   players: ["", "", ""],
   spyCount: 1,
   timer: 10,
-  set: {
-    id: 1,
-    name: "Geography",
-  },
+  sets: testSets,
+  selectedSetId: 1,
 };
 
-type SpyCountAndTimerActionPayload =
-  | { type: "set"; value: number }
-  | { type: "increment" }
-  | { type: "decrement" };
+type SpyCountAndTimerActionPayload = { type: "set"; value: number } | { type: "increment" } | { type: "decrement" };
 
 export const gameSlice = createSlice({
   name: "game",
@@ -70,12 +63,15 @@ export const gameSlice = createSlice({
           break;
       }
     },
-    setSet: (state, action) => {
-      state.set = action.payload;
+    setSets: (state, action) => {
+      state.sets = action.payload;
+    },
+    setSelectedSetId: (state, action) => {
+      state.selectedSetId = action.payload;
     },
   },
 });
 
-export const { setPlayers, setSpyCount, setTimer, setSet } = gameSlice.actions;
+export const { setPlayers, setSpyCount, setTimer, setSets, setSelectedSetId } = gameSlice.actions;
 
 export default gameSlice.reducer;
