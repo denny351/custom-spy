@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,23 +11,21 @@ import useSelectedSet from "../utils/useSelectedSet";
 
 function GameViewPage() {
   const { players, timer } = useSelector((state: RootState) => state.game);
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [totalSeconds, setTotalSeconds] = useState<number>(timer * 60);
-  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const { selectedSetLocations } = useSelectedSet();
-
-  const location = useMemo(
-    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)],
-    [selectedSetLocations]
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [totalSeconds, setTotalSeconds] = useState(timer * 60);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [spyCardKey, setSpyCardKey] = useState(0); // used to fresh render SpyCard when resetting game
+  const [location, setLocation] = useState(
+    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]
   );
-  const spy = useMemo(() => players[Math.floor(Math.random() * players.length)], [players]);
+  const [spy, setSpy] = useState(() => players[Math.floor(Math.random() * players.length)]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const emptyPlayers = players.every((player) => player === "");
-    if (emptyPlayers) {
+    if (players.every((player) => player === "")) {
       navigate("/");
     }
   }, [navigate, players]);
@@ -43,8 +41,11 @@ function GameViewPage() {
     return () => clearInterval(timer);
   }, [isTimerRunning]);
 
-  const handleCardClick = () => {
-    setCurrentIndex((prev) => prev + 1);
+  const resetGame = () => {
+    setLocation(selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]);
+    setSpy(players[Math.floor(Math.random() * players.length)]);
+    setCurrentIndex(0);
+    setSpyCardKey((prevKey) => prevKey + 1);
   };
 
   const renderTimer = () => {
@@ -80,7 +81,7 @@ function GameViewPage() {
         Back
       </Link>
 
-      <button className="flex items-center absolute top-6 right-5" onClick={() => navigate(0)}>
+      <button className="flex items-center absolute top-6 right-5" onClick={resetGame}>
         Restart
       </button>
 
@@ -89,10 +90,11 @@ function GameViewPage() {
           renderTimer()
         ) : (
           <SpyCard
+            key={spyCardKey}
             location={location}
             player={players[currentIndex]}
             isSpy={players[currentIndex] === spy}
-            onClick={handleCardClick}
+            onClick={() => setCurrentIndex((prev) => prev + 1)}
           />
         )}
       </div>
