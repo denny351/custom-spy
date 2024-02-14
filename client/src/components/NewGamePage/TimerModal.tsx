@@ -15,11 +15,11 @@ function TimerModal(props: Props) {
   const { timer } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialTimer, setInitialTimer] = useState(10);
+  const [prevTimer, setPrevTimer] = useState(timer);
 
   useEffect(() => {
     if (props.isOpen) {
-      setInitialTimer(timer);
+      setPrevTimer(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOpen]);
@@ -28,7 +28,7 @@ function TimerModal(props: Props) {
     <Modal
       isOpen={props.isOpen}
       onRequestClose={() => {
-        dispatch(setTimer({ type: "set", value: initialTimer }));
+        dispatch(setTimer({ type: "set", value: prevTimer }));
         props.onClose();
       }}
       contentLabel="Players Modal"

@@ -15,11 +15,11 @@ function SpyCountModal(props: Props) {
   const { spyCount } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialSpyCount, setInitialSpyCount] = useState(1);
+  const [prevSpyCount, setPrevSpyCount] = useState(spyCount);
 
   useEffect(() => {
     if (props.isOpen) {
-      setInitialSpyCount(spyCount);
+      setPrevSpyCount(spyCount);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOpen]);
@@ -28,7 +28,7 @@ function SpyCountModal(props: Props) {
     <Modal
       isOpen={props.isOpen}
       onRequestClose={() => {
-        dispatch(setSpyCount({ type: "set", value: initialSpyCount }));
+        dispatch(setSpyCount({ type: "set", value: prevSpyCount }));
         props.onClose();
       }}
       contentLabel="Players Modal"

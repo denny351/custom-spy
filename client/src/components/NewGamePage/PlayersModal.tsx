@@ -17,11 +17,11 @@ function PlayersModal(props: Props) {
   const { players } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialPlayers, setInitialPlayers] = useState<string[]>(["", "", ""]);
+  const [prevPlayers, setPrevPlayers] = useState<string[]>(players);
 
   useEffect(() => {
     if (props.isOpen) {
-      setInitialPlayers(players);
+      setPrevPlayers(players);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.isOpen]);
@@ -46,7 +46,7 @@ function PlayersModal(props: Props) {
     <Modal
       isOpen={props.isOpen}
       onRequestClose={() => {
-        dispatch(setPlayers(initialPlayers));
+        dispatch(setPlayers(prevPlayers));
         props.onClose();
       }}
       contentLabel="Players Modal"
