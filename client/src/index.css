@@ -21,16 +21,6 @@ p {
   word-spacing: normal;
 }
 
-.card {
-  border: 1px solid white;
-  padding: 10px;
-  margin: 10px;
-  width: 200px;
-  text-align: center;
-  cursor: pointer;
-  transition: opacity 0.3s ease;
-}
-
-.fade-out {
-  opacity: 0;
+button {
+  word-spacing: -8px;
 }

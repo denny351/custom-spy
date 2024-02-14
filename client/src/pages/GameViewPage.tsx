@@ -82,7 +82,7 @@ function GameViewPage() {
       </Link>
 
       <button className="flex items-center absolute top-6 right-5" onClick={resetGame}>
-        Restart
+        New Game
       </button>
 
       <div className="flex flex-col justify-center items-center h-full">
