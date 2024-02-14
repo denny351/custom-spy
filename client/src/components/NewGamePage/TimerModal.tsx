@@ -15,7 +15,7 @@ function TimerModal(props: Props) {
   const { timer } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialTimer, setInitialTimer] = useState<number>(10);
+  const [initialTimer, setInitialTimer] = useState(10);
 
   useEffect(() => {
     if (props.isOpen) {

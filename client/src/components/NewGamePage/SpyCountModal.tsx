@@ -15,7 +15,7 @@ function SpyCountModal(props: Props) {
   const { spyCount } = useSelector((state: RootState) => state.game);
   const dispatch = useDispatch();
 
-  const [initialSpyCount, setInitialSpyCount] = useState<number>(1);
+  const [initialSpyCount, setInitialSpyCount] = useState(1);
 
   useEffect(() => {
     if (props.isOpen) {
@@ -37,13 +37,9 @@ function SpyCountModal(props: Props) {
         <h2>Spies</h2>
 
         <div className="flex items-center my-5">
-          <SquareButton onClick={() => dispatch(setSpyCount({ type: "decrement" }))}>
-            -
-          </SquareButton>
+          <SquareButton onClick={() => dispatch(setSpyCount({ type: "decrement" }))}>-</SquareButton>
           <p className="mx-4 text-lg">{spyCount}</p>
-          <SquareButton onClick={() => dispatch(setSpyCount({ type: "increment" }))}>
-            +
-          </SquareButton>
+          <SquareButton onClick={() => dispatch(setSpyCount({ type: "increment" }))}>+</SquareButton>
         </div>
 
         <ActionButton onClick={props.onClose}>Save</ActionButton>

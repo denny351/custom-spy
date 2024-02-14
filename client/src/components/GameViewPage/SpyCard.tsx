@@ -8,8 +8,8 @@ interface Props {
 }
 
 function SpyCard(props: Props) {
-  const [hasBeenClicked, setHasBeenClicked] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [hasBeenClicked, setHasBeenClicked] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
   const handleCardClick = () => {
     setIsAnimating(true);
