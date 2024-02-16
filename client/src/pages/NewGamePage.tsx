@@ -33,10 +33,8 @@ function NewGamePage() {
     authModal: false,
   });
 
-  const {
-    game: { players, spyCount, timer },
-    user: { userId },
-  } = useSelector((state: RootState) => state);
+  const { userId } = useSelector((state: RootState) => state.user);
+  const { players, spyCount, timer } = useSelector((state: RootState) => state.game);
   const { selectedSetName } = useSelectedSet();
   const dispatch = useDispatch();
 

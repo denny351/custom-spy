@@ -54,7 +54,6 @@ class LocationController {
       });
       res.json(updatedLocation);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: "Error updating location" });
     }
   };

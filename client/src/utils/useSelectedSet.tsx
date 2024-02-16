@@ -2,10 +2,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 
 function useSelectedSet() {
-  const {
-    sets: { premadeSets, customSets },
-    game: { selectedSet },
-  } = useSelector((state: RootState) => state);
+  const { selectedSet } = useSelector((state: RootState) => state.game);
+  const { premadeSets, customSets } = useSelector((state: RootState) => state.sets);
 
   const selectedSetObj = (() => {
     const setList = selectedSet.type === "premade" ? premadeSets : customSets;

@@ -33,7 +33,6 @@ export const userSlice = createSlice({
         userSlice.caseReducers.setUserData(state, action);
       })
       .addCase(getUserId.fulfilled, (state, action) => {
-        console.log(action.payload.userId)
         state.userId = action.payload.userId;
       });
   },

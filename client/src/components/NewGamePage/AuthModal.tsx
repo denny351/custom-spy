@@ -5,6 +5,7 @@ import TextInput from "../common/TextInput";
 import ActionButton from "../common/ActionButton";
 import { AppDispatch } from "../../store/store";
 import { registerUser, loginUser } from "../../store/user/userSlice";
+import { getSets } from "../../store/set/setsSlice";
 
 interface Props {
   isOpen: boolean;
@@ -34,7 +35,7 @@ function AuthModal(props: Props) {
     setIsRegistering((prev) => !prev);
   };
 
-  const handleLogInOrSignUp = () => {
+  const handleLogInOrSignUp = async () => {
     if (!name) {
       return setError("Username is empty");
     }
@@ -49,12 +50,20 @@ function AuthModal(props: Props) {
       if (password !== password2) {
         return setError("Passwords do not match");
       }
-
-      dispatch(registerUser({ name, password }));
+      try {
+        await dispatch(registerUser({ name, password })).unwrap();
+      } catch (error) {
+        return setError("Error signing up");
+      }
     } else {
-      dispatch(loginUser({ name, password }));
+      try {
+        await dispatch(loginUser({ name, password })).unwrap();
+      } catch (error) {
+        return setError("Error logging in");
+      }
     }
 
+    dispatch(getSets());
     setName("");
     setPassword("");
     setPassword2("");
@@ -63,7 +72,7 @@ function AuthModal(props: Props) {
   };
 
   return (
-    <Modal isOpen={props.isOpen} onRequestClose={props.onClose} contentLabel="Players Modal">
+    <Modal isOpen={props.isOpen} onRequestClose={props.onClose} contentLabel="Authentication Modal">
       <div className="flex flex-col items-center text-center">
         <h2 className="mb-4">{isRegistering ? "Sign up" : "Login"}</h2>
 

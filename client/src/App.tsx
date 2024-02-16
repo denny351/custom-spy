@@ -6,12 +6,14 @@ import { useDispatch } from "react-redux";
 import { getUserId } from "./store/user/userSlice";
 import { AppDispatch } from "./store/store";
 import { useEffect } from "react";
+import { getSets } from "./store/set/setsSlice";
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     if (localStorage.token) {
       dispatch(getUserId());
+      dispatch(getSets());
     }
   }, [dispatch]);
 
