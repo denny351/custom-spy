@@ -6,8 +6,7 @@ interface JwtPayload {
 }
 
 const authMiddleware: RequestHandler = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
+  const token = req.header("authorization");
 
   if (!token) {
     return res.status(401).json({ error: "Unauthorized." });

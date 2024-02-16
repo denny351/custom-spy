@@ -15,10 +15,14 @@ class SetController {
   createSet: RequestHandler = async (req, res) => {
     const { name } = req.body;
 
+    if (!name) {
+      return res.status(400).json({ error: "Name is required." });
+    }
+
     try {
       const createdSet = await prisma.set.create({
         data: {
-          name,
+          name: name.trim(),
           userId: req.userId,
         },
       });

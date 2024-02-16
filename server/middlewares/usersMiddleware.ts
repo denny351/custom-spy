@@ -1,4 +1,4 @@
-import { RequestHandler } from 'express';
+import { RequestHandler } from "express";
 
 const usersMiddleware: RequestHandler = (req, res, next) => {
   const { name, password } = req.body;

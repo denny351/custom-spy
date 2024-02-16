@@ -19,7 +19,7 @@ class UserController {
         },
       });
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "30d" });
 
       res.json({ token });
     } catch (error) {
@@ -41,7 +41,7 @@ class UserController {
         return res.status(401).json({ error: "Authentication failed." });
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "30d" });
       res.json({ token });
     } catch (error) {
       res.status(500).json({ error: "Error logging in." });
