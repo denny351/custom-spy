@@ -39,7 +39,7 @@ function SetsPage() {
       </Link>
 
       <div className="flex flex-col items-center">
-        <h2 className="text-xl my-6">Sets</h2>
+        <h2 className="text-2xl mt-16 mb-6">Sets</h2>
 
         <div className="flex mb-6">
           <ActionButton

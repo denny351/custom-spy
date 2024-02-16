@@ -21,7 +21,7 @@ class UserController {
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "30d" });
 
-      res.json({ token });
+      res.json({ token, userId: user.id });
     } catch (error) {
       res.status(500).json({ error: "Error registering user" });
     }
@@ -42,7 +42,7 @@ class UserController {
       }
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "30d" });
-      res.json({ token });
+      res.json({ token, userId: user.id, name: user.name });
     } catch (error) {
       res.status(500).json({ error: "Error logging in" });
     }

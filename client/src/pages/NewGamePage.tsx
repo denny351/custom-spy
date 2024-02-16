@@ -10,16 +10,19 @@ import timerIcon from "../assets/timer-icon.png";
 import setsIcon from "../assets/sets-icon.png";
 import SpyCountModal from "../components/NewGamePage/SpyCountModal";
 import TimerModal from "../components/NewGamePage/TimerModal";
+import AuthModal from "../components/NewGamePage/AuthModal";
 import Layout from "../components/common/Layout";
 import { RootState } from "../store/store";
 import ActionButton from "../components/common/ActionButton";
 import { setBlankPlayers } from "../store/game/gameSlice";
+import { logoutUser } from "../store/user/userSlice";
 import useSelectedSet from "../utils/useSelectedSet";
 
 interface ModalState {
   playersModal: boolean;
   spiesModal: boolean;
   timerModal: boolean;
+  authModal: boolean;
 }
 
 function NewGamePage() {
@@ -27,9 +30,13 @@ function NewGamePage() {
     playersModal: false,
     spiesModal: false,
     timerModal: false,
+    authModal: false,
   });
 
-  const { players, spyCount, timer } = useSelector((state: RootState) => state.game);
+  const {
+    game: { players, spyCount, timer },
+    user: { userId },
+  } = useSelector((state: RootState) => state);
   const { selectedSetName } = useSelectedSet();
   const dispatch = useDispatch();
 
@@ -40,13 +47,25 @@ function NewGamePage() {
     }));
   };
 
+  const handleLoginOrLogout = () => {
+    if (userId) {
+      dispatch(logoutUser());
+    } else {
+      toggleModal("authModal");
+    }
+  };
+
   const handleNewGame = () => {
     dispatch(setBlankPlayers());
   };
 
   return (
     <Layout>
-      <h1 id="title" className="text-3xl text-center my-8">
+      <button className="flex items-center absolute top-6 right-5" onClick={handleLoginOrLogout}>
+        {userId ? "Logout" : "Login"}
+      </button>
+
+      <h1 id="title" className="text-3xl text-center mt-16 mb-8">
         Custom Spy
       </h1>
 
@@ -72,7 +91,7 @@ function NewGamePage() {
         <GameOptionRow icon={setsIcon} label="Sets" infoText={selectedSetName} onClick={() => {}} />
       </Link>
 
-      <div className="mt-auto mb-8">
+      <div className="mt-auto mb-32">
         <Link to="/game" className="block text-center mb-4" onClick={handleNewGame}>
           <ActionButton>Start</ActionButton>
         </Link>
@@ -81,6 +100,7 @@ function NewGamePage() {
       <PlayersModal isOpen={modalState.playersModal} onClose={() => toggleModal("playersModal")} />
       <SpyCountModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
       <TimerModal isOpen={modalState.timerModal} onClose={() => toggleModal("timerModal")} />
+      <AuthModal isOpen={modalState.authModal} onClose={() => toggleModal("authModal")} />
     </Layout>
   );
 }
