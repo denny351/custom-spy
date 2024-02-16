@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 const prisma = new PrismaClient();
 
-export class UserController {
+class UserController {
   registerUser: RequestHandler = async (req, res) => {
     const { name, password } = req.body;
 
@@ -20,9 +20,10 @@ export class UserController {
       });
 
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
+
       res.json({ token });
     } catch (error) {
-      res.status(400).json({ error: "Cannot register user." });
+      res.status(500).json({ error: "Error registering user." });
     }
   };
 
@@ -43,9 +44,9 @@ export class UserController {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!);
       res.json({ token });
     } catch (error) {
-      res.status(400).json({ error: "Cannot log in." });
+      res.status(500).json({ error: "Error logging in." });
     }
   };
 }
 
-export default new UserController();
+export default UserController;
