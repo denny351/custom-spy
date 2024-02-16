@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Would use UUIDs for extra security but there will never be sensitive info and keeping it simple 
 model User {
   id        Int      @id @default(autoincrement())
   name      String   @unique

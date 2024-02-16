@@ -1,15 +1,14 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express, { Request, Response } from "express";
+import { PrismaClient } from "@prisma/client";
+import userRoutes from "./routes/userRoutes";
 
-dotenv.config();
+const prisma = new PrismaClient();
+const app = express();
+app.use(express.json());
 
-const app: Express = express();
-const port = process.env.PORT || 5000;
+app.use("/users", userRoutes);
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express Server");
-});
-
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
 });
