@@ -8,6 +8,9 @@ class SetController {
   getSetsWithLocations: RequestHandler = async (req, res) => {
     try {
       const setsWithLocations = await prisma.set.findMany({
+        where: {
+          userId: req.userId,
+        },
         include: {
           locations: {
             select: {
