@@ -31,6 +31,10 @@ export const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         userSlice.caseReducers.setUserData(state, action);
+      })
+      .addCase(getUserId.fulfilled, (state, action) => {
+        console.log(action.payload.userId)
+        state.userId = action.payload.userId;
       });
   },
 });
@@ -42,6 +46,11 @@ export const registerUser = createAsyncThunk("user/register", async (authData: U
 
 export const loginUser = createAsyncThunk("user/login", async (authData: UserCredentials) => {
   const response = await API.post("/users/login", authData);
+  return response.data;
+});
+
+export const getUserId = createAsyncThunk("user/getUserId", async () => {
+  const response = await API.get("/users");
   return response.data;
 });
 

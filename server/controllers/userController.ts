@@ -6,6 +6,11 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 class UserController {
+  getUserId: RequestHandler = async (req, res) => {
+    // error handling done by auth middleware
+    res.json({ userId: req.userId });
+  };
+
   registerUser: RequestHandler = async (req, res) => {
     const { name, password } = req.body;
 
