@@ -20,25 +20,17 @@ model User {
 }
 
 model Set {
-  id          Int           @id @default(autoincrement())
-  name        String
-  createdAt   DateTime      @default(now())
-  userId      Int
-  user        User          @relation(fields: [userId], references: [id])
-  SetLocation SetLocation[]
+  id        Int        @id @default(autoincrement())
+  name      String
+  createdAt DateTime   @default(now())
+  userId    Int
+  user      User       @relation(fields: [userId], references: [id])
+  locations Location[]
 }
 
 model Location {
-  id          Int           @id @default(autoincrement())
-  name        String        @unique
-  SetLocation SetLocation[]
-}
-
-model SetLocation {
-  setId      Int
-  set        Set      @relation(fields: [setId], references: [id])
-  locationId Int
-  location   Location @relation(fields: [locationId], references: [id])
-
-  @@id([setId, locationId])
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  setId Int
+  Set   Set    @relation(fields: [setId], references: [id])
 }
