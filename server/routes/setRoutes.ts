@@ -5,7 +5,7 @@ import authMiddleware from "../middlewares/authMiddleware";
 const router = Router();
 const setController = new SetController();
 
-router.get("/", authMiddleware, setController.getSets);
+router.get("/", authMiddleware, setController.getSetsWithLocations);
 router.post("/", authMiddleware, setController.createSet);
 router.delete("/:setId", authMiddleware, setController.deleteSet);
 

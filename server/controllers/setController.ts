@@ -4,33 +4,45 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 class SetController {
-  getSets: RequestHandler = async (req, res) => {
+  // Could have a seperate endpoint for getting locations, but this should be a relatively small response
+  getSetsWithLocations: RequestHandler = async (req, res) => {
     try {
-      const sets = await prisma.set.findMany();
-      res.json(sets);
+      const setsWithLocations = await prisma.set.findMany({
+        include: {
+          locations: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      });
+      res.json(setsWithLocations);
     } catch (error) {
-      res.status(500).json({ error: "Error fetching sets." });
+      res.status(500).json({ error: "Error fetching sets" });
     }
   };
+
   createSet: RequestHandler = async (req, res) => {
     const { name } = req.body;
 
     if (!name) {
-      return res.status(400).json({ error: "Name is required." });
+      return res.status(400).json({ error: "Name is required" });
     }
 
     try {
-      const createdSet = await prisma.set.create({
+      const newSet = await prisma.set.create({
         data: {
           name: name.trim(),
           userId: req.userId,
         },
       });
-      res.json(createdSet);
+      res.status(201).json(newSet);
     } catch (error) {
-      res.status(500).json({ error: "Error creating set." });
+      res.status(500).json({ error: "Error creating set" });
     }
   };
+
   deleteSet: RequestHandler = async (req, res) => {
     const setId = parseInt(req.params.setId);
 
@@ -42,21 +54,21 @@ class SetController {
       });
 
       if (!set) {
-        return res.status(404).json({ error: "Set not found." });
+        return res.status(404).json({ error: "Set not found" });
       }
 
       if (set.userId !== req.userId) {
-        return res.status(403).json({ error: "Unauthorized." });
+        return res.status(403).json({ error: "You are not authorized to delete this set" });
       }
 
-      const deletedSet = await prisma.set.delete({
+      await prisma.set.delete({
         where: {
           id: setId,
         },
       });
-      res.json(deletedSet);
+      res.status(204).end();
     } catch (error) {
-      res.status(500).json({ error: "Error deleting set." });
+      res.status(500).json({ error: "Error deleting set" });
     }
   };
 }
