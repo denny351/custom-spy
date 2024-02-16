@@ -1,0 +1,12 @@
+import { Router } from "express";
+import LocationController from "./../controllers/locationController";
+import authMiddleware from "../middlewares/authMiddleware";
+
+const router = Router();
+const locationController = new LocationController();
+
+router.post("/", authMiddleware, locationController.createLocation);
+router.patch("/:locationId", authMiddleware, locationController.updateLocation);
+router.delete("/:locationId", authMiddleware, locationController.deleteLocation);
+
+export default router;

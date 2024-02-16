@@ -9,7 +9,7 @@ const authMiddleware: RequestHandler = (req, res, next) => {
   const token = req.header("authorization");
 
   if (!token) {
-    return res.status(401).json({ error: "Unauthorized." });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
@@ -18,7 +18,7 @@ const authMiddleware: RequestHandler = (req, res, next) => {
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    return res.status(401).json({ error: "Token is not valid." });
+    return res.status(401).json({ error: "Token is not valid" });
   }
 };
 
