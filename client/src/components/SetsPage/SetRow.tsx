@@ -1,16 +1,17 @@
-import { Eye } from "react-feather";
+import { ReactNode } from "react";
 
 interface Props {
   name: string;
   cardsQuantity: number;
+  icon: ReactNode;
   onRowClick: () => void;
-  onViewClick: () => void;
+  onIconClick: () => void;
 }
 
 function SetRow(props: Props) {
   const handleViewSet = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    props.onViewClick();
+    props.onIconClick();
   };
 
   return (
@@ -18,7 +19,7 @@ function SetRow(props: Props) {
       <h3>{props.name}</h3>
       <div className="flex items-center pl-4" onClick={handleViewSet}>
         <p className="mr-1 text-gray-400 text-xs">{props.cardsQuantity} cards</p>
-        <Eye color="gray" size={18} />
+        {props.icon}
       </div>
     </div>
   );

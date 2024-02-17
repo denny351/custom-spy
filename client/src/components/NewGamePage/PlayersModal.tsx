@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { Trash2 } from "react-feather";
 import Modal from "../common/Modal";
 import SquareButton from "../common/SquareButton";
-import TextInput from "../common/TextInput";
 import ActionButton from "../common/ActionButton";
 import { RootState } from "../../store/store";
 import { setPlayers } from "../../store/game/gameSlice";
+import TextInputWithButton from "../common/TextInputWithButton";
 
 interface Props {
   isOpen: boolean;
@@ -37,9 +37,9 @@ function PlayersModal(props: Props) {
   };
 
   const handleInputChange = (index: number, value: string) => {
-    const newplayers = [...players];
-    newplayers[index] = value;
-    dispatch(setPlayers(newplayers));
+    const newPlayers = [...players];
+    newPlayers[index] = value;
+    dispatch(setPlayers(newPlayers));
   };
 
   return (
@@ -61,16 +61,14 @@ function PlayersModal(props: Props) {
         </div>
 
         {players.map((value, index) => (
-          <div key={index} className="relative w-full">
-            <TextInput
-              placeholder={`Enter player name #${index + 1}`}
-              value={value}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-            />
-            <span className="absolute right-2.5 top-5 z-10" onClick={() => removePlayer(index)}>
-              <Trash2 color="gray" size={18} />
-            </span>
-          </div>
+          <TextInputWithButton
+            key={index}
+            placeholder={`Enter player name #${index + 1}`}
+            value={value}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+            onButtonClick={() => removePlayer(index)}
+            buttonIcon={<Trash2 color="gray" size={18} />}
+          />
         ))}
 
         <ActionButton onClick={props.onClose}>Save</ActionButton>

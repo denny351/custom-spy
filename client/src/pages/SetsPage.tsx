@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ChevronLeft } from "react-feather";
+import { ChevronLeft, Edit3, Eye } from "react-feather";
 import { useDispatch, useSelector } from "react-redux";
-
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
 import SetRow from "../components/SetsPage/SetRow";
@@ -12,6 +11,7 @@ import { SelectedSet } from "../interfaces/Set";
 import ViewSetModal from "../components/SetsPage/ViewSetModal";
 import { Set } from "../interfaces/Set";
 import NewSetModal from "../components/SetsPage/NewSetModal";
+import EditSetModal from "../components/SetsPage/EditSetModal";
 
 interface ModalState {
   viewSetModal: boolean;
@@ -27,7 +27,8 @@ function SetsPage() {
     newSetModal: false,
     editSetModal: false,
   });
-  const [selectedSetForModal, setSelectedSetForModal] = useState<Set | null>(premadeSets[0]);
+  const [setForViewModal, setSetForViewModal] = useState<Set | null>(null);
+  const [setForEditModal, setSetForEditModal] = useState<Set | null>(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -45,8 +46,14 @@ function SetsPage() {
 
   const handleViewClick = (id: number) => {
     const selected = premadeSets.find((set) => set.id === id)!;
-    setSelectedSetForModal(selected);
+    setSetForViewModal(selected);
     toggleModal("viewSetModal");
+  };
+
+  const handleEditClick = (id: number) => {
+    const selected = customSets.find((set) => set.id === id)!;
+    setSetForEditModal(selected);
+    toggleModal("editSetModal");
   };
 
   return (
@@ -81,8 +88,9 @@ function SetsPage() {
               key={set.id}
               name={set.name}
               cardsQuantity={set.locations.length}
+              icon={<Eye color="gray" size={18} />}
               onRowClick={() => handleRowClick({ type: "premade", id: set.id })}
-              onViewClick={() => handleViewClick(set.id)}
+              onIconClick={() => handleViewClick(set.id)}
             />
           ))}
 
@@ -96,8 +104,9 @@ function SetsPage() {
                 key={set.id}
                 name={set.name}
                 cardsQuantity={set.locations.length}
+                icon={<Edit3 color="gray" size={18} />}
                 onRowClick={() => handleRowClick({ type: "premade", id: set.id })}
-                onViewClick={() => handleViewClick(set.id)}
+                onIconClick={() => handleEditClick(set.id)}
               />
             ))}
           </>
@@ -107,7 +116,12 @@ function SetsPage() {
         <ViewSetModal
           isOpen={modalState.viewSetModal}
           onClose={() => toggleModal("viewSetModal")}
-          set={selectedSetForModal}
+          set={setForViewModal}
+        />
+        <EditSetModal
+          isOpen={modalState.editSetModal}
+          onClose={() => toggleModal("editSetModal")}
+          set={setForEditModal}
         />
       </div>
     </Layout>
