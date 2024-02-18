@@ -2,8 +2,11 @@ import { useEffect, useState } from "react";
 import { Trash2 } from "react-feather";
 import Modal from "../common/Modal";
 import ActionButton from "../common/ActionButton";
-import { Set } from "../../interfaces/Set";
+import { EditableLocation, Set } from "../../interfaces/Set";
 import TextInputWithButton from "../common/TextInputWithButton";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { updateLocations } from "../../store/set/setsSlice";
 
 interface Props {
   set: Set | null;
@@ -11,13 +14,10 @@ interface Props {
   onClose: () => void;
 }
 
-interface EditableLocation {
-  id: number | null;
-  name: string;
-}
-
 function EditSetModal(props: Props) {
   const [editableLocations, setEditableLocations] = useState<EditableLocation[]>([{ id: null, name: "" }]);
+
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (!props.set?.locations) {
@@ -30,7 +30,12 @@ function EditSetModal(props: Props) {
     editableLocations.push({ id: null, name: "" });
 
     setEditableLocations(editableLocations);
-  }, []);
+  }, [props.isOpen, props.set?.locations]);
+
+  const handleClose = () => {
+    setEditableLocations([{ id: null, name: "" }]);
+    props.onClose();
+  };
 
   const handleInputChange = (index: number, value: string) => {
     setEditableLocations((prevLocations) => {
@@ -49,27 +54,37 @@ function EditSetModal(props: Props) {
   };
 
   const removeLocation = (indexToRemove: number) => {
-    setEditableLocations(editableLocations.filter((_, index) => index !== indexToRemove));
+    if (indexToRemove !== editableLocations.length - 1) {
+      setEditableLocations(editableLocations.filter((_, index) => index !== indexToRemove));
+    }
+  };
+
+  const handleSave = () => {
+    if (!props.set) {
+      return;
+    }
+    editableLocations.pop();
+    dispatch(updateLocations({ setId: props.set.id, locations: editableLocations }));
+    handleClose();
   };
 
   return (
-    <Modal isOpen={props.isOpen} onRequestClose={props.onClose} contentLabel="Edit Set Modal">
+    <Modal isOpen={props.isOpen} onRequestClose={handleClose} contentLabel="Edit Set Modal">
       <div className="flex flex-col items-center">
         <h2 className="mb-4">Locations</h2>
-        <div className="relative w-full">
-          {editableLocations.map((location, index) => (
-            <TextInputWithButton
-              key={location.id}
-              placeholder={`Enter location`}
-              value={location.name}
-              onChange={(e) => handleInputChange(index, e.target.value)}
-              onButtonClick={() => removeLocation(index)}
-              buttonIcon={<Trash2 color="gray" size={18} />}
-            />
-          ))}
-        </div>
 
-        <ActionButton onClick={props.onClose}>Save</ActionButton>
+        {editableLocations.map((location, index) => (
+          <TextInputWithButton
+            key={index}
+            placeholder={`Enter location`}
+            value={location.name}
+            onChange={(e) => handleInputChange(index, e.target.value)}
+            onButtonClick={() => removeLocation(index)}
+            buttonIcon={<Trash2 color="gray" size={18} />}
+          />
+        ))}
+
+        <ActionButton onClick={handleSave}>Save</ActionButton>
       </div>
     </Modal>
   );

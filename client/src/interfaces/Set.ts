@@ -3,6 +3,11 @@ export interface Location {
   name: string;
 }
 
+export interface EditableLocation {
+  id: number | null;
+  name: string;
+}
+
 export interface Set {
   id: number;
   name: string;

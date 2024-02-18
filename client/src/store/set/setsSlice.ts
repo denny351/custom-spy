@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import API from "../../api";
 import premadeSets from "../../data/premadeSets";
-import { Set } from "../../interfaces/Set";
+import { Set, EditableLocation } from "../../interfaces/Set";
 
 interface SetsState {
   premadeSets: Set[];
@@ -28,6 +28,15 @@ export const setSlice = createSlice({
       })
       .addCase(deleteSet.fulfilled, (state, action) => {
         state.customSets = action.payload;
+      })
+      .addCase(updateLocations.fulfilled, (state, action) => {
+        const { setId, locations } = action.payload;
+        const updatedCustomSets = [...state.customSets];
+        const index = updatedCustomSets.findIndex((set) => set.id === setId);
+        if (index !== -1) {
+          updatedCustomSets[index].locations = locations;
+        }
+        state.customSets = updatedCustomSets;
       });
   },
 });
@@ -46,6 +55,14 @@ export const deleteSet = createAsyncThunk("set/deleteSet", async (setId: number)
   const response = await API.get(`/sets/${setId}`);
   return response.data;
 });
+
+export const updateLocations = createAsyncThunk(
+  "set/updateLocations",
+  async (data: { setId: number; locations: EditableLocation[] }) => {
+    const response = await API.post(`/locations`, data);
+    return { setId: data.setId, locations: response.data };
+  }
+);
 
 export const {} = setSlice.actions;
 

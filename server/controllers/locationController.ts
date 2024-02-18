@@ -3,6 +3,26 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+interface NewLocationData {
+  id: null;
+  name: string;
+}
+
+interface UpdateLocationData {
+  id: number;
+  name: string;
+}
+
+interface createOrUpdateLocationsRequestBody {
+  setId: number;
+  locations: (NewLocationData | UpdateLocationData)[];
+}
+
+interface CustomError {
+  error: string;
+  statusCode: number;
+}
+
 const findAndCheckOwnershipOfLocation = async (locationId: number, userId: number) => {
   const location = await prisma.location.findUnique({
     where: { id: locationId },
@@ -10,69 +30,84 @@ const findAndCheckOwnershipOfLocation = async (locationId: number, userId: numbe
   });
 
   if (!location) {
-    return { error: "Location not found", statusCode: 404 };
+    throw { error: "Location not found", statusCode: 404 };
   }
 
   if (location.set.userId !== userId) {
-    return { error: "You are not authorized to perform this action", statusCode: 403 };
+    throw { error: "You are not authorized to perform this action", statusCode: 403 };
   }
-
-  return {};
 };
 
 class LocationController {
-  createLocation: RequestHandler = async (req, res) => {
-    const { name, setId } = req.body;
+  createOrUpdateLocations: RequestHandler = async (req, res) => {
+    const { setId, locations } = <createOrUpdateLocationsRequestBody>req.body;
 
-    if (!name || !setId) {
-      return res.status(400).json({ error: "Name and Set ID is required" });
-    }
+    const { newLocations, updatedLocations } = locations.reduce<{
+      newLocations: NewLocationData[];
+      updatedLocations: UpdateLocationData[];
+    }>(
+      (acc, location) => {
+        if (location.id === null) {
+          acc.newLocations.push(location);
+        } else {
+          acc.updatedLocations.push(location);
+        }
+        return acc;
+      },
+      { newLocations: [], updatedLocations: [] }
+    );
 
     try {
-      const newLocation = await prisma.location.create({
-        data: { name, setId: parseInt(setId) },
+      const createNewLocations = newLocations.map(async (location) => {
+        return await prisma.location.create({
+          data: { name: location.name, setId: setId },
+        });
       });
-      res.status(201).json(newLocation);
+
+      const updateLocations = updatedLocations.map(async (location) => {
+        await findAndCheckOwnershipOfLocation(location.id, req.userId);
+        return await prisma.location.update({
+          where: { id: location.id },
+          data: { name: location.name },
+        });
+      });
+
+      await Promise.all([...createNewLocations, ...updateLocations]);
+
+      const newUpdatedLocations = await prisma.location.findMany({
+        where: {
+          setId: setId,
+        },
+      });
+
+      res.json(newUpdatedLocations);
     } catch (error) {
-      res.status(500).json({ error: "Error creating location" });
+      if (typeof error === "object" && error !== null) {
+        const customError = error as CustomError;
+        res.status(customError.statusCode).json({ error: customError.error });
+      } else {
+        res.status(500).json({ error: "Error updating locations" });
+      }
     }
   };
 
-  updateLocation: RequestHandler = async (req, res) => {
-    const locationId = parseInt(req.params.locationId);
-    const { name } = req.body;
-
-    try {
-      const { error, statusCode } = await findAndCheckOwnershipOfLocation(locationId, req.userId);
-      if (error) {
-        return res.status(statusCode).json({ error });
-      }
-
-      const updatedLocation = await prisma.location.update({
-        where: { id: locationId },
-        data: { name },
-      });
-      res.json(updatedLocation);
-    } catch (error) {
-      res.status(500).json({ error: "Error updating location" });
-    }
-  };
-
-  deleteLocation: RequestHandler = async (req, res) => {
+  deleteLocation: RequestHandler<{ locationId: string }> = async (req, res) => {
     const locationId = parseInt(req.params.locationId);
 
     try {
-      const { error, statusCode } = await findAndCheckOwnershipOfLocation(locationId, req.userId);
-      if (error) {
-        return res.status(statusCode).json({ error });
-      }
+      await findAndCheckOwnershipOfLocation(locationId, req.userId);
 
       await prisma.location.delete({
         where: { id: locationId },
       });
       res.status(204).end();
     } catch (error) {
-      res.status(500).json({ error: "Error deleting location" });
+      if (typeof error === "object" && error !== null) {
+        const customError = error as CustomError;
+        res.status(customError.statusCode).json({ error: customError.error });
+      } else {
+        res.status(500).json({ error: "Error deleting location" });
+      }
     }
   };
 }

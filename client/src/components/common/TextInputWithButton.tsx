@@ -2,8 +2,8 @@ import TextInput from "./TextInput";
 import { InputHTMLAttributes, ReactNode } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
-  onButtonClick: () => void;
-  buttonIcon: ReactNode;
+  onButtonClick?: () => void;
+  buttonIcon?: ReactNode;
 }
 
 export default function TextInputWithButton(props: Props) {
