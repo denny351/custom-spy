@@ -27,8 +27,9 @@ function SpyCard(props: Props) {
 
   return (
     <div
-      className={`flex flex-col justify-between py-14 px-6 h-4/5 max-h-96 w-full max-w-96 text-center border-2 transition-opacity duration-300 ease-linear cursor-pointer 
+      className={`flex flex-col justify-between py-14 px-6 w-full max-w-96 text-center border-2 transition-opacity duration-300 ease-linear cursor-pointer 
       ${isAnimating && "opacity-0"}`}
+      style={{ height: "400px" }}
       onClick={handleCardClick}
       onAnimationEnd={() => setIsAnimating(false)}
     >

@@ -42,6 +42,8 @@ function GameViewPage() {
   }, [isTimerRunning]);
 
   const resetGame = () => {
+    setIsTimerRunning(false);
+    setTotalSeconds(timer * 60);
     setLocation(selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]);
     setSpy(players[Math.floor(Math.random() * players.length)]);
     setCurrentIndex(0);
@@ -85,13 +87,13 @@ function GameViewPage() {
         New Game
       </button>
 
-      <div className="flex flex-col justify-center items-center h-full">
+      <div className="flex flex-col grow justify-center items-center">
         {currentIndex >= players.length ? (
           renderTimer()
         ) : (
           <SpyCard
             key={spyCardKey}
-            location={location}
+            location={location.name}
             player={players[currentIndex]}
             isSpy={players[currentIndex] === spy}
             onClick={() => setCurrentIndex((prev) => prev + 1)}
