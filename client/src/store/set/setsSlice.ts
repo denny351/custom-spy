@@ -27,7 +27,8 @@ export const setSlice = createSlice({
         state.customSets = [...state.customSets, newSet];
       })
       .addCase(deleteSet.fulfilled, (state, action) => {
-        state.customSets = action.payload;
+        const updatedSets = state.customSets.filter((set) => set.id !== action.payload.setId);
+        state.customSets = updatedSets;
       })
       .addCase(updateLocations.fulfilled, (state, action) => {
         const { setId, locations } = action.payload;
@@ -36,6 +37,17 @@ export const setSlice = createSlice({
         if (index !== -1) {
           updatedCustomSets[index].locations = locations;
         }
+        state.customSets = updatedCustomSets;
+      })
+      .addCase(deleteLocation.fulfilled, (state, action) => {
+        const { setId, locationId } = action.payload;
+        const updatedCustomSets = state.customSets.map((set) => {
+          if (set.id === setId) {
+            const updatedLocations = set.locations.filter((location) => location.id !== locationId);
+            return { ...set, locations: updatedLocations };
+          }
+          return set;
+        });
         state.customSets = updatedCustomSets;
       });
   },
@@ -52,8 +64,8 @@ export const createSet = createAsyncThunk("set/createSet", async (name: string) 
 });
 
 export const deleteSet = createAsyncThunk("set/deleteSet", async (setId: number) => {
-  const response = await API.get(`/sets/${setId}`);
-  return response.data;
+  await API.delete(`/sets/${setId}`);
+  return { setId };
 });
 
 export const updateLocations = createAsyncThunk(
@@ -64,6 +76,12 @@ export const updateLocations = createAsyncThunk(
   }
 );
 
-export const {} = setSlice.actions;
+export const deleteLocation = createAsyncThunk(
+  "set/deleteLocation",
+  async (data: { setId: number; locationId: number }) => {
+    await API.delete(`/locations/${data.locationId}`);
+    return data;
+  }
+);
 
 export default setSlice.reducer;

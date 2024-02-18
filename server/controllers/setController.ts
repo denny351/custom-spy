@@ -46,7 +46,7 @@ class SetController {
     }
   };
 
-  deleteSet: RequestHandler = async (req, res) => {
+  deleteSet: RequestHandler<{ setId: string }> = async (req, res) => {
     const setId = parseInt(req.params.setId);
 
     try {

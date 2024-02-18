@@ -6,7 +6,8 @@ import { EditableLocation, Set } from "../../interfaces/Set";
 import TextInputWithButton from "../common/TextInputWithButton";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../store/store";
-import { updateLocations } from "../../store/set/setsSlice";
+import { deleteLocation, deleteSet, updateLocations } from "../../store/set/setsSlice";
+import ConfirmModal from "../common/ConfirmModal";
 
 interface Props {
   set: Set | null;
@@ -16,6 +17,7 @@ interface Props {
 
 function EditSetModal(props: Props) {
   const [editableLocations, setEditableLocations] = useState<EditableLocation[]>([{ id: null, name: "" }]);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -34,7 +36,16 @@ function EditSetModal(props: Props) {
 
   const handleClose = () => {
     setEditableLocations([{ id: null, name: "" }]);
+    setIsConfirmModalOpen(false);
     props.onClose();
+  };
+
+  const handleDeleteSet = () => {
+    if (!props.set) {
+      return;
+    }
+    dispatch(deleteSet(props.set.id));
+    handleClose();
   };
 
   const handleInputChange = (index: number, value: string) => {
@@ -53,9 +64,12 @@ function EditSetModal(props: Props) {
     });
   };
 
-  const removeLocation = (indexToRemove: number) => {
+  const removeLocation = (indexToRemove: number, locationId: number | null) => {
     if (indexToRemove !== editableLocations.length - 1) {
       setEditableLocations(editableLocations.filter((_, index) => index !== indexToRemove));
+    }
+    if (locationId !== null && props.set) {
+      dispatch(deleteLocation({ setId: props.set?.id, locationId }));
     }
   };
 
@@ -70,6 +84,10 @@ function EditSetModal(props: Props) {
 
   return (
     <Modal isOpen={props.isOpen} onRequestClose={handleClose} contentLabel="Edit Set Modal">
+      <button className="flex items-center absolute top-6 right-5" onClick={() => setIsConfirmModalOpen(true)}>
+        <Trash2 color="gray" size={18} />
+      </button>
+
       <div className="flex flex-col items-center">
         <h2 className="mb-4">Locations</h2>
 
@@ -79,13 +97,20 @@ function EditSetModal(props: Props) {
             placeholder={`Enter location`}
             value={location.name}
             onChange={(e) => handleInputChange(index, e.target.value)}
-            onButtonClick={() => removeLocation(index)}
+            onButtonClick={() => removeLocation(index, location.id)}
             buttonIcon={<Trash2 color="gray" size={18} />}
           />
         ))}
 
         <ActionButton onClick={handleSave}>Save</ActionButton>
       </div>
+
+      <ConfirmModal
+        isOpen={isConfirmModalOpen}
+        message={`Delete ${props.set?.name}?`}
+        onConfirm={handleDeleteSet}
+        onClose={() => setIsConfirmModalOpen(false)}
+      />
     </Modal>
   );
 }
