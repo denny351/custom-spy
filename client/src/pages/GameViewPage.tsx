@@ -17,7 +17,7 @@ function GameViewPage() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [spyCardKey, setSpyCardKey] = useState(0); // used to fresh render SpyCard when resetting game
   const [location, setLocation] = useState(
-    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]
+    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)],
   );
   const [spy, setSpy] = useState(() => players[Math.floor(Math.random() * players.length)]);
 

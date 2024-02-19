@@ -73,7 +73,7 @@ export const updateLocations = createAsyncThunk(
   async (data: { setId: number; locations: EditableLocation[] }) => {
     const response = await API.post(`/locations`, data);
     return { setId: data.setId, locations: response.data };
-  }
+  },
 );
 
 export const deleteLocation = createAsyncThunk(
@@ -81,7 +81,7 @@ export const deleteLocation = createAsyncThunk(
   async (data: { setId: number; locationId: number }) => {
     await API.delete(`/locations/${data.locationId}`);
     return data;
-  }
+  },
 );
 
 export default setSlice.reducer;
