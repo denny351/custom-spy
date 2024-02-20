@@ -21,8 +21,8 @@ function HelpModal(props: Props) {
         <h2 className="mb-4">Instructions</h2>
 
         <ol>
-          {helpTexts.map((text) => (
-            <li className="mb-3">
+          {helpTexts.map((text, index) => (
+            <li key={index} className="mb-3">
               <p>{text}</p>
             </li>
           ))}
