@@ -21,6 +21,7 @@ interface ModalState {
 
 function SetsPage() {
   const { premadeSets, customSets } = useSelector((state: RootState) => state.sets);
+  const { userId } = useSelector((state: RootState) => state.user);
   const [setsType, setSetsType] = useState<"premade" | "custom">("premade");
   const [modalState, setModalState] = useState<ModalState>({
     viewSetModal: false,
@@ -96,16 +97,24 @@ function SetsPage() {
 
         {setsType === "custom" && (
           <>
-            <ActionButton className="mt-0" onClick={() => toggleModal("newSetModal")}>
-              New Set
-            </ActionButton>
+            {userId ? (
+              <ActionButton className="mt-0" onClick={() => toggleModal("newSetModal")}>
+                New Set
+              </ActionButton>
+            ) : (
+              <p>Must be logged in to create a custom set</p>
+            )}
+
             {customSets.map((set) => (
               <SetRow
                 key={set.id}
                 name={set.name}
                 cardsQuantity={set.locations.length}
                 icon={<Edit3 color="gray" size={18} />}
-                onRowClick={() => handleRowClick({ type: "premade", id: set.id })}
+                onRowClick={() => {
+                  if (!set.locations.length) return;
+                  handleRowClick({ type: "custom", id: set.id });
+                }}
                 onIconClick={() => handleEditClick(set.id)}
               />
             ))}

@@ -15,7 +15,7 @@ function ConfirmModal(props: Props) {
         <h3>{props.message}</h3>
 
         <ActionButton onClick={props.onConfirm}>Confirm</ActionButton>
-        <p className="text-base underline" onClick={props.onClose}>
+        <p className="text-base underline cursor-pointer" onClick={props.onClose}>
           Cancel
         </p>
       </div>

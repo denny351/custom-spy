@@ -6,7 +6,7 @@ import { ChevronLeft } from "react-feather";
 import SpyCard from "../components/GameViewPage/SpyCard";
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
-import { resetState } from "../store/game/gameSlice";
+import { resetGameState } from "../store/game/gameSlice";
 import useSelectedSet from "../utils/useSelectedSet";
 
 function GameViewPage() {
@@ -76,7 +76,7 @@ function GameViewPage() {
         to="/"
         className="flex items-center absolute top-6"
         onClick={() => {
-          dispatch(resetState());
+          dispatch(resetGameState());
         }}
       >
         <ChevronLeft />

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { HelpCircle } from "react-feather";
 import PlayersModal from "../components/NewGamePage/PlayersModal";
 import GameOptionRow from "../components/NewGamePage/GameOptionRow";
 import playersIcon from "../assets/players-icon.png";
@@ -14,11 +14,11 @@ import AuthModal from "../components/NewGamePage/AuthModal";
 import Layout from "../components/common/Layout";
 import { RootState } from "../store/store";
 import ActionButton from "../components/common/ActionButton";
-import { setBlankPlayers } from "../store/game/gameSlice";
+import { resetGameState, setBlankPlayers } from "../store/game/gameSlice";
 import { logoutUser } from "../store/user/userSlice";
 import useSelectedSet from "../utils/useSelectedSet";
-import { HelpCircle } from "react-feather";
 import HelpModal from "../components/NewGamePage/HelpModal";
+import { resetCustomSets } from "../store/set/setsSlice";
 
 interface ModalState {
   playersModal: boolean;
@@ -52,6 +52,8 @@ function NewGamePage() {
   const handleLoginOrLogout = () => {
     if (userId) {
       dispatch(logoutUser());
+      dispatch(resetCustomSets());
+      dispatch(resetGameState());
     } else {
       toggleModal("authModal");
     }

@@ -94,7 +94,7 @@ function AuthModal(props: Props) {
         {error && <p className="text-red-400">{error}</p>}
 
         <ActionButton onClick={handleLogInOrSignUp}>{isRegistering ? "Sign up" : "Log in"}</ActionButton>
-        <p className="text-base underline" onClick={handleSwitchRegisterLogin}>
+        <p className="text-base underline cursor-pointer" onClick={handleSwitchRegisterLogin}>
           {isRegistering ? "Login" : "Sign up"}
         </p>
       </div>

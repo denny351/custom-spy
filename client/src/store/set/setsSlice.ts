@@ -16,7 +16,11 @@ const initialState: SetsState = {
 export const setSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    resetCustomSets: (state) => {
+      state.customSets = [];
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getSets.fulfilled, (state, action) => {
@@ -81,7 +85,9 @@ export const deleteLocation = createAsyncThunk(
   async (data: { setId: number; locationId: number }) => {
     await API.delete(`/locations/${data.locationId}`);
     return data;
-  },
+  }
 );
+
+export const { resetCustomSets } = setSlice.actions;
 
 export default setSlice.reducer;

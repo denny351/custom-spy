@@ -66,10 +66,10 @@ export const gameSlice = createSlice({
     setSelectedSet: (state, action: PayloadAction<SelectedSet>) => {
       state.selectedSet = { type: action.payload.type, id: action.payload.id };
     },
-    resetState: () => initialState,
+    resetGameState: () => initialState,
   },
 });
 
-export const { setPlayers, setBlankPlayers, setSpyCount, setTimer, setSelectedSet, resetState } = gameSlice.actions;
+export const { setPlayers, setBlankPlayers, setSpyCount, setTimer, setSelectedSet, resetGameState } = gameSlice.actions;
 
 export default gameSlice.reducer;
