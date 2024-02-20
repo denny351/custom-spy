@@ -17,12 +17,15 @@ import ActionButton from "../components/common/ActionButton";
 import { setBlankPlayers } from "../store/game/gameSlice";
 import { logoutUser } from "../store/user/userSlice";
 import useSelectedSet from "../utils/useSelectedSet";
+import { HelpCircle } from "react-feather";
+import HelpModal from "../components/NewGamePage/HelpModal";
 
 interface ModalState {
   playersModal: boolean;
   spiesModal: boolean;
   timerModal: boolean;
   authModal: boolean;
+  helpModal: boolean;
 }
 
 function NewGamePage() {
@@ -31,6 +34,7 @@ function NewGamePage() {
     spiesModal: false,
     timerModal: false,
     authModal: false,
+    helpModal: false,
   });
 
   const { userId } = useSelector((state: RootState) => state.user);
@@ -59,6 +63,10 @@ function NewGamePage() {
 
   return (
     <Layout>
+      <button className="flex items-center absolute top-6" onClick={() => toggleModal("helpModal")}>
+        <HelpCircle />
+      </button>
+
       <button className="flex items-center absolute top-6 right-5" onClick={handleLoginOrLogout}>
         {userId ? "Logout" : "Login"}
       </button>
@@ -99,6 +107,7 @@ function NewGamePage() {
       <SpyCountModal isOpen={modalState.spiesModal} onClose={() => toggleModal("spiesModal")} />
       <TimerModal isOpen={modalState.timerModal} onClose={() => toggleModal("timerModal")} />
       <AuthModal isOpen={modalState.authModal} onClose={() => toggleModal("authModal")} />
+      <HelpModal isOpen={modalState.helpModal} onClose={() => toggleModal("helpModal")} />
     </Layout>
   );
 }

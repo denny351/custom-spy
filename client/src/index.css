@@ -24,3 +24,10 @@ p {
 button {
   word-spacing: -8px;
 }
+
+ol li {
+  font-family: monospace;
+  list-style: decimal;
+  float: left;
+  margin: 0 25px;
+}
