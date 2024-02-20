@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
 import SpyCard from "../components/GameViewPage/SpyCard";
 import Layout from "../components/common/Layout";
 import ActionButton from "../components/common/ActionButton";
-import { resetGameState } from "../store/game/gameSlice";
 import useSelectedSet from "../utils/useSelectedSet";
 
 function GameViewPage() {
@@ -17,11 +16,10 @@ function GameViewPage() {
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [spyCardKey, setSpyCardKey] = useState(0); // used to fresh render SpyCard when resetting game
   const [location, setLocation] = useState(
-    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)],
+    () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]
   );
   const [spy, setSpy] = useState(() => players[Math.floor(Math.random() * players.length)]);
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,13 +70,7 @@ function GameViewPage() {
 
   return (
     <Layout>
-      <Link
-        to="/"
-        className="flex items-center absolute top-6"
-        onClick={() => {
-          dispatch(resetGameState());
-        }}
-      >
+      <Link to="/" className="flex items-center absolute top-6">
         <ChevronLeft />
         Back
       </Link>
