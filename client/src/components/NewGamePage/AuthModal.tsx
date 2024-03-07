@@ -6,6 +6,7 @@ import ActionButton from "../common/ActionButton";
 import { AppDispatch } from "../../store/store";
 import { registerUser, loginUser } from "../../store/user/userSlice";
 import { getSets } from "../../store/set/setsSlice";
+import googleLogo from "../../assets/google-g.svg";
 
 interface Props {
   isOpen: boolean;
@@ -94,6 +95,14 @@ function AuthModal(props: Props) {
         {error && <p className="text-red-400">{error}</p>}
 
         <ActionButton onClick={handleLogInOrSignUp}>{isRegistering ? "Sign up" : "Log in"}</ActionButton>
+
+        <a href={`${import.meta.env.VITE_API_URL}/users/google`} className="block w-full">
+          <ActionButton className="flex items-center justify-center w-full mx-auto mt-0" onClick={() => {}}>
+            <img src={googleLogo} alt="google logo" className="mr-2 h-5" />
+            Google
+          </ActionButton>
+        </a>
+
         <p className="text-base underline cursor-pointer" onClick={handleSwitchRegisterLogin}>
           {isRegistering ? "Login" : "Sign up"}
         </p>

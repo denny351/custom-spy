@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NewGamePage from "./pages/NewGamePage";
 import GameViewPage from "./pages/GameViewPage";
 import SetsPage from "./pages/SetsPage";
+import GoogleSuccessPage from "./pages/GoogleSuccessPage";
 import { useDispatch } from "react-redux";
 import { getUserId } from "./store/user/userSlice";
 import { AppDispatch } from "./store/store";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/" element={<NewGamePage />} />
         <Route path="/sets" element={<SetsPage />} />
         <Route path="/game" element={<GameViewPage />} />
+        <Route path="/google/success" element={<GoogleSuccessPage />} />
       </Routes>
     </BrowserRouter>
   );

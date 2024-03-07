@@ -53,6 +53,6 @@ export const getUserId = createAsyncThunk("user/getUserId", async () => {
   return response.data;
 });
 
-export const { logoutUser } = userSlice.actions;
+export const { logoutUser, setUserData } = userSlice.actions;
 
 export default userSlice.reducer;

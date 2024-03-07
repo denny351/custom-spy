@@ -9,5 +9,7 @@ const userController = new UserController();
 router.get("/", authMiddleware, userController.getUserId);
 router.post("/register", usersMiddleware, userController.registerUser);
 router.post("/login", usersMiddleware, userController.loginUser);
+router.get("/google", userController.googleAuth);
+router.get("/google/callback", userController.googleAuthCallback);
 
 export default router;
