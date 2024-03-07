@@ -28,6 +28,10 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 
+app.get('/health', (req, res) => {
+  res.send('Ok');
+});
+
 app.use("/users", userRoutes);
 app.use("/sets", setRoutes);
 app.use("/locations", locationRoutes);

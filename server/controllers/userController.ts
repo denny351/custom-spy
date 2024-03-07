@@ -96,7 +96,7 @@ class UserController {
     }
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, { expiresIn: "30d" });
-    res.redirect(`${process.env.CLIENT_URL}/google/success?token=${encodeURIComponent(token)}&userId=${user.id}`);
+    res.redirect(`${process.env.CLIENT_URL}/oauthsuccess?token=${encodeURIComponent(token)}&userId=${user.id}`);
   };
 }
 

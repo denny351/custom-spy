@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setUserData } from "../store/user/userSlice";
 
-function GoogleSuccessPage() {
+function OAuthSuccessPage() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,4 +22,4 @@ function GoogleSuccessPage() {
   return <p>Google login success</p>;
 }
 
-export default GoogleSuccessPage;
+export default OAuthSuccessPage;
