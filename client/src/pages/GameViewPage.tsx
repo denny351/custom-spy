@@ -9,16 +9,16 @@ import ActionButton from "../components/common/ActionButton";
 import useSelectedSet from "../utils/useSelectedSet";
 
 function GameViewPage() {
-  const { players, timer } = useSelector((state: RootState) => state.game);
+  const { players, timer, spyCount } = useSelector((state: RootState) => state.game);
   const { selectedSetLocations } = useSelectedSet();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [totalSeconds, setTotalSeconds] = useState(timer * 60);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [spyCardKey, setSpyCardKey] = useState(0); // used to fresh render SpyCard when resetting game
   const [location, setLocation] = useState(
     () => selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]
   );
-  const [spy, setSpy] = useState(() => players[Math.floor(Math.random() * players.length)]);
+  const [spies, setSpies] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -26,10 +26,11 @@ function GameViewPage() {
     if (players.every((player) => player === "")) {
       navigate("/");
     }
-  }, [navigate, players]);
+    setSpies(generateSpies(players, spyCount));
+  }, [navigate, players, spyCount]);
 
   useEffect(() => {
-    let timer: number;
+    let timer: NodeJS.Timeout;
     if (isTimerRunning) {
       timer = setInterval(() => {
         setTotalSeconds((prev) => prev - 1);
@@ -39,12 +40,27 @@ function GameViewPage() {
     return () => clearInterval(timer);
   }, [isTimerRunning]);
 
+  const generateSpies = (players: string[], spyCount: number) => {
+    const selectedSpies: string[] = [];
+
+    while (selectedSpies.length < spyCount) {
+      const randomIndex = Math.floor(Math.random() * players.length);
+      const potentialSpy = players[randomIndex];
+
+      if (!selectedSpies.includes(potentialSpy)) {
+        selectedSpies.push(potentialSpy);
+      }
+    }
+
+    return selectedSpies;
+  };
+
   const resetGame = () => {
     setIsTimerRunning(false);
     setTotalSeconds(timer * 60);
     setLocation(selectedSetLocations[Math.floor(Math.random() * selectedSetLocations.length)]);
-    setSpy(players[Math.floor(Math.random() * players.length)]);
-    setCurrentIndex(0);
+    setSpies(generateSpies(players, spyCount));
+    setCurrentCardIndex(0);
     setSpyCardKey((prevKey) => prevKey + 1);
   };
 
@@ -80,15 +96,15 @@ function GameViewPage() {
       </button>
 
       <div className="flex flex-col grow justify-center items-center">
-        {currentIndex >= players.length ? (
+        {currentCardIndex >= players.length ? (
           renderTimer()
         ) : (
           <SpyCard
             key={spyCardKey}
             location={location.name}
-            player={players[currentIndex]}
-            isSpy={players[currentIndex] === spy}
-            onClick={() => setCurrentIndex((prev) => prev + 1)}
+            player={players[currentCardIndex]}
+            isSpy={spies.includes(players[currentCardIndex])}
+            onClick={() => setCurrentCardIndex((prev) => prev + 1)}
           />
         )}
       </div>
