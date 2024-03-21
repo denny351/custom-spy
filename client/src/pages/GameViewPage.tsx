@@ -30,7 +30,7 @@ function GameViewPage() {
   }, [navigate, players, spyCount]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: number | undefined;
     if (isTimerRunning) {
       timer = setInterval(() => {
         setTotalSeconds((prev) => prev - 1);
